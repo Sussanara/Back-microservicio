@@ -82,4 +82,9 @@ public class TrabajadorController {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public ResponseEntity<?> create(Trabajador trabajador) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

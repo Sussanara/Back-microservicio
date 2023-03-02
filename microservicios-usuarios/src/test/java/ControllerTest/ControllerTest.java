@@ -1,14 +1,23 @@
 package ControllerTest;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 import com.formacionbdi.microservicios.app.usuarios.controllers.TrabajadorController;
 import com.formacionbdi.microservicios.app.usuarios.models.entity.Trabajador;
 import com.formacionbdi.microservicios.app.usuarios.services.TrabajadorService;
@@ -40,6 +49,7 @@ public class ControllerTest {
    
     @InjectMocks
     private TrabajadorController trabajadorController;
+	private Object trabajadorDetails;
    
     @BeforeEach
     public void setUp() throws Exception {
@@ -91,4 +101,33 @@ public class ControllerTest {
         assertThat(trabajador.getEmail()).isEqualTo(EMAIL);
         assertThat(trabajador.getArea()).isEqualTo(AREA);
     }
-}
+    
+    @Test
+	public void updateTrabajadorTest() {
+		Long trabajadorId = 1L;
+		Optional<Trabajador> oTrabajador = trabajadorService.findById(trabajadorId);
+		assertTrue(oTrabajador.isPresent());
+
+		Trabajador personDetails = new Trabajador();
+		personDetails.setNombre("Paula Saavedra");
+		personDetails.setEmail("paula@gmail.com");
+		personDetails.setArea("RR.HH");
+
+		ResponseEntity<?> responseEntity = update(trabajadorDetails, trabajadorId);
+
+		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+
+		Trabajador updatedTrabajador = (Trabajador) responseEntity.getBody();
+
+		assertEquals(trabajadorId, updatedTrabajador.getId());
+		assertEquals("Paula Saavedra", updatedTrabajador.getNombre());
+		assertEquals("paula@gmail.com", updatedTrabajador.getEmail());
+		assertEquals("RR.HH", updatedTrabajador.getArea());
+    }
+
+	private ResponseEntity<?> update(Object trabajadorDetails2, Long trabajadorId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+    
